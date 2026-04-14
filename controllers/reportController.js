@@ -26,7 +26,9 @@ exports.exportExcelReport = async (req, res) => {
         const studentsSheet = workbook.addWorksheet('Students Progress');
         studentsSheet.columns = [
             { header: 'Name', key: 'name', width: 25 },
-            { header: 'Email', key: 'email', width: 30 },
+            { header: 'Gmail', key: 'email', width: 35 },
+            { header: 'Pass (Initial)', key: 'pass', width: 20 },
+            { header: 'Status', key: 'status', width: 15 },
             { header: 'Approved Tasks', key: 'approved', width: 15 },
             { header: 'Pending Tasks', key: 'pending', width: 15 }
         ];
@@ -36,6 +38,8 @@ exports.exportExcelReport = async (req, res) => {
             studentsSheet.addRow({
                 name: user.name,
                 email: user.email,
+                pass: user.initialPassword || 'Updated',
+                status: user.isVerified ? 'Verified' : 'Pending',
                 approved: userSubs.filter(s => s.status === 'approved').length,
                 pending: userSubs.filter(s => s.status === 'pending').length
             });
@@ -46,49 +50,6 @@ exports.exportExcelReport = async (req, res) => {
 
         await workbook.xlsx.write(res);
         res.end();
-    } catch (error) {
-        console.error(error);
-        if(!res.headersSent) {
-            res.status(500).json({ success: false, message: 'Export failed' });
-        }
-    }
-};
-
-exports.exportPdfReport = async (req, res) => {
-    try {
-        const users = await User.find({ role: 'user' });
-        const tasks = await Task.find();
-        const submissions = await Submission.find().populate('user task');
-
-        const doc = new PDFDocument();
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=devtrack_report.pdf');
-        doc.pipe(res);
-
-        doc.fontSize(20).text('DevTrack System Report', { align: 'center' });
-        doc.moveDown();
-
-        doc.fontSize(14).text('Summary Statistics');
-        doc.fontSize(12).text(`Total Students: ${users.length}`);
-        doc.text(`Total Tasks: ${tasks.length}`);
-        doc.text(`Total Submissions: ${submissions.length}`);
-        doc.text(`Approved Submissions: ${submissions.filter(s => s.status === 'approved').length}`);
-        doc.moveDown();
-
-        doc.fontSize(14).text('Student Progress Breakdown');
-        doc.moveDown();
-
-        users.forEach(user => {
-            const userSubs = submissions.filter(s => s.user && s.user._id.toString() === user._id.toString());
-            const approved = userSubs.filter(s => s.status === 'approved').length;
-            const pending = userSubs.filter(s => s.status === 'pending').length;
-            
-            doc.fontSize(12).text(`${user.name} (${user.email})`);
-            doc.fontSize(10).text(`Approved: ${approved} | Pending: ${pending}`);
-            doc.moveDown();
-        });
-
-        doc.end();
     } catch (error) {
         console.error(error);
         if(!res.headersSent) {

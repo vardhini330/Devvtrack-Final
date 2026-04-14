@@ -111,6 +111,35 @@
                 </div>
             </div>
 
+            <!-- AI Smart Suggestions Row -->
+            <div id="ai-insights-row" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Suggestions -->
+                <div class="bg-gradient-to-br from-indigo-900/40 to-cardBg rounded-xl p-6 border border-indigo-500/30 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-indigo-400"><i class="fas fa-magic"></i></div>
+                    <h3 class="text-lg font-bold mb-4 flex items-center text-indigo-300">
+                        <i class="fas fa-lightbulb mr-2"></i> Smart Task Suggestions
+                    </h3>
+                    <div id="ai-suggestions-list" class="space-y-3">
+                        <div class="animate-pulse flex space-x-4">
+                            <div class="flex-1 space-y-2 py-1">
+                                <div class="h-2 bg-gray-700 rounded"></div>
+                                <div class="h-2 bg-gray-700 rounded w-5/6"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Insights -->
+                <div class="bg-gradient-to-br from-emerald-900/40 to-cardBg rounded-xl p-6 border border-emerald-500/30 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-emerald-400"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="text-lg font-bold mb-4 flex items-center text-emerald-300">
+                        <i class="fas fa-brain mr-2"></i> Performance AI Insight
+                    </h3>
+                    <p id="ai-insight-text" class="text-gray-300 text-sm leading-relaxed italic">
+                        "Analyzing your progress to provide the best feedback..."
+                    </p>
+                </div>
+            </div>
+
             <!-- Task Trackers -->
             <div class="bg-cardBg border border-gray-700 rounded-xl overflow-hidden shadow-md">
                 <div class="flex border-b border-gray-700 overflow-x-auto">

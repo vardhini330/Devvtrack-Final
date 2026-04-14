@@ -63,9 +63,17 @@
             <div class="flex flex-wrap items-center gap-3 transition-opacity duration-300" id="header-actions">
                 <button onclick="downloadExcelReport()" id="btn-export-excel"
                     class="px-3 py-2.5 bg-green-600/20 hover:bg-green-600/30 text-green-500 border border-green-500/50 font-medium rounded-lg flex items-center transition-all">
-                    <i class="fas fa-file-excel mr-2"></i> Excel
+                    <i class="fas fa-file-excel mr-2"></i> Excel Report
                 </button>
                 <div class="w-px h-8 bg-gray-700 mx-1 hidden sm:block"></div>
+                <!-- Bulk Import -->
+                <div class="flex items-center">
+                    <input type="file" id="bulk-import-input" class="hidden" accept=".xlsx" onchange="handleBulkImport(event)">
+                    <button onclick="document.getElementById('bulk-import-input').click()"
+                        class="px-4 py-2.5 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/50 font-medium rounded-lg flex items-center transition-all">
+                        <i class="fas fa-file-import mr-2"></i> Bulk Import
+                    </button>
+                </div>
                 <button onclick="openStudentModal()"
                     class="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white font-medium rounded-lg flex items-center transition-all">
                     <i class="fas fa-user-plus mr-2 text-emerald-400"></i> Add Student

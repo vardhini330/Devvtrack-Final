@@ -35,6 +35,26 @@ const userSchema = new mongoose.Schema({
     totalTasksCompleted: {
         type: Number,
         default: 0
+    },
+    isFirstLogin: {
+        type: Boolean,
+        default: true
+    },
+    initialPassword: {
+        type: String,
+        default: ''
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: {
+        type: String,
+        default: ''
+    },
+    domain: {
+        type: String,
+        default: 'Web Development'
     }
 }, {
     timestamps: true

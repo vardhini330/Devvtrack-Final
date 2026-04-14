@@ -781,3 +781,56 @@ window.closeStudentProfile = function() {
         spModal.classList.remove('flex');
     }, 300);
 };
+
+// --- Bulk Import ---
+window.handleBulkImport = async function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!confirm(`Are you sure you want to import students from "${file.name}"?`)) {
+        event.target.value = '';
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const btn = event.target.nextElementSibling || document.querySelector('button[onclick*="bulk-import-input"]');
+    const originalHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Importing...';
+
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/admin/users/upload', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            let msg = `Successfully imported ${result.count} students!`;
+            if (result.errors && result.errors.length > 0) {
+                msg += `\nErrors in ${result.errors.length} rows. Check console for details.`;
+                console.error('Import Errors:', result.errors);
+            }
+            alert(msg);
+            loadStats();
+            if (panelStudents && !panelStudents.classList.contains('hidden')) {
+                loadStudentsTab();
+            }
+        } else {
+            throw new Error(result.message || 'Import failed');
+        }
+    } catch (err) {
+        alert(err.message);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+        event.target.value = '';
+    }
+};

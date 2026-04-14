@@ -185,7 +185,9 @@ const createStudent = async (req, res) => {
             name,
             email,
             password,
-            role: 'user'
+            initialPassword: password, // Store plain text for excel report
+            role: 'user',
+            isFirstLogin: true
         });
 
         if (user) {
@@ -203,4 +205,60 @@ const createStudent = async (req, res) => {
     }
 };
 
-module.exports = { getStats, createTask, getAllSubmissions, updateSubmissionStatus, getAllUsers, getAttendance, markAttendance, createStudent, getUserProfileDetails };
+// @desc    Bulk import users from Excel
+// @route   POST /api/admin/users/upload
+// @access  Private/Admin
+const bulkImportUsers = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        const ExcelJS = require('exceljs');
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.readFile(req.file.path);
+        const worksheet = workbook.getWorksheet(1);
+        
+        const users = [];
+        const errors = [];
+        let createdCount = 0;
+
+        worksheet.eachRow(async (row, rowNumber) => {
+            if (rowNumber === 1) return; // Skip header
+
+            try {
+                const name = row.getCell(1).value?.toString() || row.getCell(1).value?.result?.toString();
+                const email = row.getCell(2).value?.toString() || row.getCell(2).value?.result?.toString() || row.getCell(2).text;
+                const password = row.getCell(3).value?.toString() || 'student123';
+
+                if (!name || !email) {
+                    errors.push(`Row ${rowNumber}: Name or Email missing`);
+                    return;
+                }
+
+                // Create user
+                await User.create({
+                    name,
+                    email,
+                    password,
+                    initialPassword: password,
+                    isFirstLogin: true,
+                    role: 'user'
+                });
+                createdCount++;
+            } catch (err) {
+                errors.push(`Row ${rowNumber}: ${err.message}`);
+            }
+        });
+
+        res.status(200).json({
+            message: 'Import completed',
+            count: createdCount,
+            errors
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getStats, createTask, getAllSubmissions, updateSubmissionStatus, getAllUsers, getAttendance, markAttendance, createStudent, getUserProfileDetails, bulkImportUsers };

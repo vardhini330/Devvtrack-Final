@@ -4,6 +4,15 @@ if (!checkAuth()) {
 }
 
 const user = getUser();
+
+// Force first-time password change
+if (localStorage.getItem('user')) {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData.isFirstLogin) {
+        window.location.href = '/change-password.html';
+    }
+}
+
 let currentTabType = 'daily';
 let allSubmissions = [];
 
@@ -56,7 +65,43 @@ async function initDashboard() {
     // Load initial data
     await loadMetrics();
     await loadTasks();
+    await loadAIData();
 }
+
+async function loadAIData() {
+    try {
+        const suggestions = await apiFetch('/ai/suggest-tasks');
+        const list = document.getElementById('ai-suggestions-list');
+        if (list) {
+            list.innerHTML = suggestions.suggestedTasks.map(t => `
+                <div class="flex items-center p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-lg text-sm text-indigo-200">
+                    <i class="fas fa-check-circle mr-3 opacity-50"></i>
+                    ${t}
+                </div>
+            `).join('') || '<p class="text-xs text-gray-500">No suggestions available.</p>';
+        }
+
+        const insights = await apiFetch('/ai/insights');
+        const insightText = document.getElementById('ai-insight-text');
+        if (insightText) {
+            insightText.textContent = `"${insights.insight}"`;
+        }
+    } catch (e) {
+        console.error('AI Data failed', e);
+    }
+}
+
+window.switchView = function(viewId, link) {
+    document.getElementById('main-dashboard').className = (viewId === 'main-dashboard') ? 'space-y-8' : 'hidden';
+    document.getElementById('ai-assistant').className = (viewId === 'ai-assistant') ? 'h-[calc(100vh-180px)] flex flex-col space-y-4' : 'hidden';
+    
+    document.querySelectorAll('.tab-link').forEach(l => {
+        l.classList.remove('bg-primary/20', 'text-primary');
+        l.classList.add('text-gray-400');
+    });
+    link.classList.remove('text-gray-400');
+    link.classList.add('bg-primary/20', 'text-primary');
+};
 
 async function loadMetrics() {
     try {

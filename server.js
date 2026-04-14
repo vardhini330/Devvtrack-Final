@@ -28,6 +28,7 @@ app.use('/api/submissions', require('./routes/submissionRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/internships', require('./routes/internshipRoutes'));
+app.use('/api/ai', require('./routes/aiRoutes'));
 
 const PORT = process.env.PORT || 5000;
 
@@ -38,10 +39,18 @@ connectDB().then(async () => {
     // Ensure Admin
     let admin = await User.findOne({ email: 'admin@devtrack.com' });
     if (!admin) {
-        await User.create({ name: 'Super Admin', email: 'admin@devtrack.com', password: 'password123', role: 'admin' });
+        await User.create({ 
+            name: 'Super Admin', 
+            email: 'admin@devtrack.com', 
+            password: 'password123', 
+            initialPassword: 'password123', 
+            role: 'admin',
+            isFirstLogin: false 
+        });
         console.log('✅ Admin account restored.');
     } else {
         admin.password = 'password123';
+        admin.initialPassword = 'password123';
         await admin.save();
         console.log('✅ Admin password synchronized.');
     }
@@ -49,10 +58,18 @@ connectDB().then(async () => {
     // Ensure Student
     let student = await User.findOne({ email: 'student@devtrack.com' });
     if (!student) {
-        await User.create({ name: 'Student User', email: 'student@devtrack.com', password: 'password123', role: 'user' });
+        await User.create({ 
+            name: 'Student User', 
+            email: 'student@devtrack.com', 
+            password: 'password123', 
+            initialPassword: 'password123', 
+            role: 'user',
+            isFirstLogin: true 
+        });
         console.log('✅ Student account restored.');
     } else {
         student.password = 'password123';
+        student.initialPassword = 'password123';
         await student.save();
         console.log('✅ Student password synchronized.');
     }
