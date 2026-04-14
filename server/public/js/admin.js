@@ -514,16 +514,12 @@ async function handleExportDownload(type, endpoint, btnId, originalHtml) {
     }
 }
 
-window.downloadPdfReport = function() {
-    handleExportDownload('pdf', '/export/pdf', 'btn-export-pdf', '<i class="fas fa-file-pdf mr-2"></i> PDF');
-};
-
 window.downloadExcelReport = function() {
     handleExportDownload('xlsx', '/export/excel', 'btn-export-excel', '<i class="fas fa-file-excel mr-2"></i> Excel');
 };
 
 // --- Internships Admin Logic ---
-const internshipsList = document.getElementById('internships-list');
+const internshipsList = document.getElementById('admin-internship-list');
 const verifyIntModal = document.getElementById('verify-int-modal');
 const verifyIntModalContent = document.getElementById('verify-int-modal-content');
 const verifyIntForm = document.getElementById('verify-int-form');

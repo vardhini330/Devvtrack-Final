@@ -67,6 +67,7 @@ const loginUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 streak: user.streak,
+                isFirstLogin: user.isFirstLogin,
                 token: generateToken(user._id)
             });
         } else {
@@ -101,9 +102,32 @@ const getMyAttendance = async (req, res) => {
     }
 };
 
+// @desc    Change user password
+// @route   POST /api/auth/change-password
+// @access  Private
+const changePassword = async (req, res) => {
+    try {
+        const { newPassword } = req.body;
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.password = newPassword;
+        user.isFirstLogin = false;
+        await user.save();
+
+        res.status(200).json({ success: true, message: 'Password updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
     getMe,
-    getMyAttendance
+    getMyAttendance,
+    changePassword
 };

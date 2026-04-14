@@ -29,9 +29,13 @@
                 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-8">
                 DevTrack</h1>
             <nav class="space-y-2">
-                <a href="#"
-                    class="flex items-center space-x-3 px-4 py-3 rounded-lg bg-primary/20 text-primary font-medium transition-colors">
+                <a href="#" id="dashboard-link"
+                    class="flex items-center space-x-3 px-4 py-3 rounded-lg bg-primary/20 text-primary font-medium transition-colors tab-link active" onclick="switchView('main-dashboard', this)">
                     <i class="fas fa-home"></i> <span>Dashboard</span>
+                </a>
+                <a href="#" id="ai-link"
+                    class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-cardHover hover:text-white transition-colors tab-link" onclick="switchView('ai-assistant', this)">
+                    <i class="fas fa-robot"></i> <span>AI Assistant</span>
                 </a>
                 <a href="/admin.html" id="admin-link"
                     class="hidden flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-cardHover hover:text-white transition-colors">
@@ -57,14 +61,6 @@
                 <p class="text-sm text-gray-400" id="current-date">Today is...</p>
             </div>
             <div class="flex items-center space-x-4">
-                <button onclick="downloadPdfReport()" id="btn-export-pdf"
-                    class="px-3 py-2 bg-red-600/20 hover:bg-red-600/30 text-red-500 border border-red-500/50 text-sm font-medium rounded-lg flex items-center transition-all">
-                    <i class="fas fa-file-pdf mr-2"></i> PDF
-                </button>
-                <button onclick="downloadExcelReport()" id="btn-export-excel"
-                    class="px-3 py-2 bg-green-600/20 hover:bg-green-600/30 text-green-500 border border-green-500/50 text-sm font-medium rounded-lg flex items-center transition-all">
-                    <i class="fas fa-file-excel mr-2"></i> Excel
-                </button>
                 <div class="h-10 w-10 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center font-bold shadow-lg"
                     id="user-avatar">
                     U
@@ -143,6 +139,47 @@
                 <div class="p-6 min-h-[300px]" id="tasks-container">
                     <div class="flex items-center justify-center h-full text-gray-400"><i
                             class="fas fa-spinner fa-spin mr-2"></i> Loading tasks...</div>
+                </div>
+            </div>
+            </div>
+            
+            <!-- AI Assistant View -->
+            <div id="ai-assistant" class="hidden h-[calc(100vh-180px)] flex flex-col space-y-4">
+                <div class="bg-cardBg border border-gray-700 rounded-xl flex-1 flex flex-col overflow-hidden shadow-xl">
+                    <div class="p-4 border-b border-gray-700 bg-gray-800/50 flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                <i class="fas fa-robot text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white">DevTrack AI Assistant</h3>
+                                <p class="text-xs text-green-400"><i class="fas fa-circle text-[8px] mr-1"></i> Online & Processing</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4">
+                        <div class="flex justify-start mb-4">
+                            <div class="flex items-start max-w-[80%]">
+                                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-robot text-xs"></i>
+                                </div>
+                                <div class="bg-gray-700 text-white p-3 rounded-2xl shadow-sm text-sm">
+                                    Hello! I am your DevTrack AI. How can I help you today with your internship, tasks, or LeetCode progress?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 bg-darkBg border-t border-gray-700">
+                        <form id="ai-chat-form" class="flex items-center space-x-3">
+                            <input type="text" id="ai-chat-input" placeholder="Ask me anything..." 
+                                class="flex-1 bg-gray-800 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                            <button type="submit" class="p-3 bg-primary hover:bg-purple-600 rounded-xl text-white transition-all shadow-lg shadow-primary/20">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -262,6 +299,7 @@
 
     <script src="/js/app.js"></script>
     <script src="/js/dashboard.js"></script>
+    <script src="/js/ai.js"></script>
 </body>
 
 </html>

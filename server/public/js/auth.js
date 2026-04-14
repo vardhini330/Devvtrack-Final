@@ -36,12 +36,19 @@ authForm.addEventListener('submit', async (e) => {
 
         // Store user data
         localStorage.setItem('token', data.token);
-        localStorage.setItem('userId', data._id);
+        localStorage.setItem('user', JSON.stringify({
+            id: data._id,
+            name: data.name,
+            email: data.email,
+            role: data.role,
+            isFirstLogin: data.isFirstLogin
+        }));
         localStorage.setItem('role', data.role);
-        localStorage.setItem('userName', data.name);
 
-        // Redirect based on role
-        if (data.role === 'admin') {
+        // Redirect based on security status and role
+        if (data.isFirstLogin) {
+            window.location.href = '/change-password.html';
+        } else if (data.role === 'admin') {
             window.location.href = '/admin.html';
         } else {
             window.location.href = '/index.html';

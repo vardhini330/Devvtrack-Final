@@ -61,10 +61,6 @@
                 <p class="text-sm text-gray-400" id="header-desc">Manage tasks, exports, and submissions.</p>
             </div>
             <div class="flex flex-wrap items-center gap-3 transition-opacity duration-300" id="header-actions">
-                <button onclick="downloadPdfReport()" id="btn-export-pdf"
-                    class="px-3 py-2.5 bg-red-600/20 hover:bg-red-600/30 text-red-500 border border-red-500/50 font-medium rounded-lg flex items-center transition-all">
-                    <i class="fas fa-file-pdf mr-2"></i> PDF
-                </button>
                 <button onclick="downloadExcelReport()" id="btn-export-excel"
                     class="px-3 py-2.5 bg-green-600/20 hover:bg-green-600/30 text-green-500 border border-green-500/50 font-medium rounded-lg flex items-center transition-all">
                     <i class="fas fa-file-excel mr-2"></i> Excel
@@ -161,44 +157,42 @@
                 </div>
             </div> <!-- End Verification Panel -->
 
-            <!-- ATTENDANCE PANEL -->
-            <div id="panel-attendance" class="hidden space-y-8 animate-fade-in relative">
-                <div
-                    class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-cardBg border border-gray-700/60 p-6 rounded-xl shadow-sm">
-                    <div>
-                        <h3 class="text-xl font-bold">Daily Attendance</h3>
-                        <p class="text-sm text-gray-400 mt-1">Track student presence and tardiness.</p>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <label class="text-sm font-medium text-gray-300">Select Date:</label>
-                        <input type="date" id="attendance-date"
-                            class="bg-darkBg border border-gray-600 rounded-lg px-4 py-2 text-white outline-none focus:ring-2 focus:ring-red-500 text-sm font-medium">
-                    </div>
-                </div>
-
+            </div>
+            
+            <!-- INTERNSHIPS PANEL -->
+            <div id="panel-internships" class="hidden space-y-6">
                 <div class="bg-cardBg border border-gray-700 rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6 border-b border-gray-700 bg-gray-800/20">
+                        <h3 class="text-xl font-bold">External Interships Review</h3>
+                    </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-gray-800/80 text-gray-400 text-xs uppercase tracking-wider">
-                                    <th class="p-4 font-semibold">Student Name</th>
-                                    <th class="p-4 font-semibold">Email</th>
-                                    <th class="p-4 font-semibold text-center">Status</th>
+                                    <th class="p-4 font-semibold">Student</th>
+                                    <th class="p-4 font-semibold">Company & Domain</th>
+                                    <th class="p-4 font-semibold">Documents</th>
+                                    <th class="p-4 font-semibold">Status</th>
+                                    <th class="p-4 font-semibold text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="attendance-list" class="divide-y divide-gray-700/50 text-sm">
+                            <tbody id="admin-internship-list" class="divide-y divide-gray-700/50 text-sm">
                                 <tr>
-                                    <td colspan="3" class="p-8 text-center text-gray-500">Loading students...</td>
+                                    <td colspan="5" class="p-8 text-center text-gray-500">Loading internships...</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="p-4 bg-gray-800/30 border-t border-gray-700 flex justify-end">
-                        <button onclick="saveAttendance()" id="save-attendance-btn"
-                            class="px-6 py-2.5 bg-secondary hover:bg-green-600 text-white font-medium rounded-lg shadow-lg flex items-center transition-all shadow-secondary/20">
-                            <i class="fas fa-save mr-2"></i> Save Attendance
-                        </button>
-                    </div>
+                </div>
+            </div>
+
+            <!-- STUDENTS PANEL -->
+            <div id="panel-students" class="hidden space-y-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Students Registry</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="students-grid">
+                    <div class="text-center text-gray-500 py-8 col-span-full"><i class="fas fa-spinner fa-spin mr-2"></i> Loading students...</div>
                 </div>
             </div>
 
